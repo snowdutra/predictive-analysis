@@ -1,0 +1,55 @@
+Questão 3 - Análise de Sentimento em 'The Adventures of Tom Sawyer'
+Arquivo usado: tom sawyer.txt 
+
+Configuração: block_size = 40 linhas por bloco
+
+Número de blocos analisados: 71 
+
+Top 20 palavras positivas (Bing):
+# A tibble: 29 × 2
+   word           n
+   <chr>      <int>
+ 1 pretty        33
+ 2 perfectly     16
+ 3 glad          15
+ 4 honor         13
+ 5 quiet         11
+ 6 astonished    10
+ 7 free          10
+ 8 powerful      10
+ 9 ready         10
+10 refund        10
+# ℹ 19 more rows
+# ℹ Use `print(n = ...)` to see more rows
+
+Top 20 palavras negativas (Bing):
+# A tibble: 22 × 2
+   word        n
+   <chr>   <int>
+ 1 poor       28
+ 2 dead       25
+ 3 awful      20
+ 4 kill       18
+ 5 struck     16
+ 6 hard       13
+ 7 killed     13
+ 8 murder     13
+ 9 trouble    12
+10 worried    12
+# ℹ 12 more rows
+# ℹ Use `print(n = ...)` to see more rows
+
+Resumo rápido da variação de sentimento (primeiros 10 blocos):
+# A tibble: 10 × 4
+   index negative positive sentiment_score
+   <dbl>    <int>    <int>           <int>
+ 1     2       12        4              -8
+ 2     3       17       11              -6
+ 3     4        7        6              -1
+ 4     5       14        6              -8
+ 5     6        9        7              -2
+ 6     7       12        4              -8
+ 7     8        5        0              -5
+ 8     9        9        6              -3
+ 9    10        7        9               2
+10    11       10        4              -6

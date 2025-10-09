@@ -1,0 +1,48 @@
+--- Modelo completo ---
+R2: 0.8180  R2 ajustado: 0.8171
+
+Tabela de coeficientes (modelo completo)
+                 Estimate   Std. Error    t value     Pr(>|t|)
+(Intercept)  5.844130e+00 4.043011e-01 14.4548943 2.393534e-44
+OverallQual  1.069983e-01 5.191807e-03 20.6090591 5.495557e-83
+GrLivArea    2.294378e-04 1.355748e-05 16.9233363 8.915921e-59
+GarageCars   8.417781e-02 8.149523e-03 10.3291694 3.491854e-24
+TotalBsmtSF  1.046673e-04 1.294264e-05  8.0870119 1.277624e-15
+YearBuilt    2.483387e-03 2.128304e-04 11.6683853 3.903620e-30
+FullBath    -6.449290e-03 1.182762e-02 -0.5452738 5.856490e-01
+LotArea      3.313059e-06 4.768189e-07  6.9482546 5.566216e-12
+
+VIF (modelo completo)
+OverallQual   GrLivArea  GarageCars TotalBsmtSF   YearBuilt    FullBath 
+   2.577687    2.537592    1.854482    1.611917    2.065929    2.122833 
+    LotArea 
+   1.132476 
+
+--- Modelo selecionado (exhaustive AIC) ---
+Variáveis selecionadas:  OverallQual, GrLivArea, GarageCars, TotalBsmtSF, YearBuilt, LotArea 
+R2: 0.8180  R2 ajustado: 0.8172
+
+Tabela de coeficientes (modelo step)
+                Estimate   Std. Error   t value     Pr(>|t|)
+(Intercept) 5.920945e+00 3.788723e-01 15.627812 5.242950e-51
+OverallQual 1.068513e-01 5.183552e-03 20.613527 5.039509e-83
+GrLivArea   2.256218e-04 1.160879e-05 19.435433 5.632267e-75
+GarageCars  8.401433e-02 8.142037e-03 10.318588 3.864739e-24
+TotalBsmtSF 1.055816e-04 1.283046e-05  8.228985 4.151426e-16
+YearBuilt   2.442325e-03 1.990149e-04 12.272071 5.181898e-33
+LotArea     3.316392e-06 4.766644e-07  6.957498 5.222646e-12
+
+VIF (modelo step)
+OverallQual   GrLivArea  GarageCars TotalBsmtSF   YearBuilt     LotArea 
+   2.570739    1.861434    1.851972    1.584860    1.807298    1.132290 
+
+ANOVA (modelo step vs completo)
+Analysis of Variance Table
+
+Model 1: SalePrice ~ OverallQual + GrLivArea + GarageCars + TotalBsmtSF + 
+    YearBuilt + FullBath + LotArea
+Model 2: SalePrice ~ OverallQual + GrLivArea + GarageCars + TotalBsmtSF + 
+    YearBuilt + LotArea
+  Res.Df    RSS Df  Sum of Sq      F Pr(>F)
+1   1452 42.371                            
+2   1453 42.380 -1 -0.0086763 0.2973 0.5856

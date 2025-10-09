@@ -1,0 +1,78 @@
+--- Modelo completo (summary) ---
+
+Call:
+lm(formula = avg_score ~ gender + race.ethnicity + lunch + test.preparation.course, 
+    data = df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-51.499  -8.248   0.161   9.150  30.829 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                  65.2752     1.6169  40.370  < 2e-16 ***
+gendermale                   -4.0110     0.8136  -4.930 9.64e-07 ***
+race.ethnicitygroup B         1.4720     1.6479   0.893 0.371942    
+race.ethnicitygroup C         2.9489     1.5399   1.915 0.055780 .  
+race.ethnicitygroup D         5.7458     1.5720   3.655 0.000271 ***
+race.ethnicitygroup E         7.8218     1.7400   4.495 7.77e-06 ***
+lunchstandard                 8.6320     0.8474  10.187  < 2e-16 ***
+test.preparation.coursenone  -7.7255     0.8464  -9.127  < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 12.79 on 992 degrees of freedom
+Multiple R-squared:  0.2004,	Adjusted R-squared:  0.1947 
+F-statistic: 35.51 on 7 and 992 DF,  p-value: < 2.2e-16
+
+
+--- VIF (modelo completo) ---
+                            GVIF Df GVIF^(1/(2*Df))
+gender                  1.009684  1        1.004830
+race.ethnicity          1.018381  4        1.002279
+lunch                   1.004389  1        1.002192
+test.preparation.course 1.005995  1        1.002993
+
+--- Modelo stepAIC (summary) ---
+
+Call:
+lm(formula = avg_score ~ gender + race.ethnicity + lunch + test.preparation.course, 
+    data = df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-51.499  -8.248   0.161   9.150  30.829 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                  65.2752     1.6169  40.370  < 2e-16 ***
+gendermale                   -4.0110     0.8136  -4.930 9.64e-07 ***
+race.ethnicitygroup B         1.4720     1.6479   0.893 0.371942    
+race.ethnicitygroup C         2.9489     1.5399   1.915 0.055780 .  
+race.ethnicitygroup D         5.7458     1.5720   3.655 0.000271 ***
+race.ethnicitygroup E         7.8218     1.7400   4.495 7.77e-06 ***
+lunchstandard                 8.6320     0.8474  10.187  < 2e-16 ***
+test.preparation.coursenone  -7.7255     0.8464  -9.127  < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 12.79 on 992 degrees of freedom
+Multiple R-squared:  0.2004,	Adjusted R-squared:  0.1947 
+F-statistic: 35.51 on 7 and 992 DF,  p-value: < 2.2e-16
+
+
+--- VIF (modelo step) ---
+                            GVIF Df GVIF^(1/(2*Df))
+gender                  1.009684  1        1.004830
+race.ethnicity          1.018381  4        1.002279
+lunch                   1.004389  1        1.002192
+test.preparation.course 1.005995  1        1.002993
+
+--- ANOVA (m_full vs m_step) ---
+Analysis of Variance Table
+
+Model 1: avg_score ~ gender + race.ethnicity + lunch + test.preparation.course
+Model 2: avg_score ~ gender + race.ethnicity + lunch + test.preparation.course
+  Res.Df    RSS Df Sum of Sq F Pr(>F)
+1    992 162378                      
+2    992 162378  0         0         

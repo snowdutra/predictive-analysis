@@ -1,0 +1,354 @@
+---
+title: "Prova"
+author: "Gustavo Dutra"
+date: "2025-10-06"
+output:
+  word_document: default
+  pdf_document:
+    latex_engine: xelatex
+---
+
+## QUESTÃO 01
+
+# Contexto
+
+Análise dos determinantes do preço de venda (SalePrice) no Ames Housing Dataset. Foi usado o subconjunto de variáveis: OverallQual, GrLivArea, GarageCars, TotalBsmtSF, YearBuilt, FullBath e LotArea. A variável resposta foi transformada por log: log(SalePrice).
+
+# Resultados principais
+
+Resumo dos principais resultados (obtidos em `analysis_output.txt`):
+
+- R² (modelo completo): 0.818 — R² ajustado: 0.8171
+- R² (modelo stepwise AIC): 0.818 — R² ajustado: 0.8172
+- Variáveis selecionadas pelo Stepwise (AIC): OverallQual, GrLivArea, GarageCars, TotalBsmtSF, YearBuilt, LotArea
+- Variável removida pelo Stepwise: FullBath (não significativa no modelo completo: p ≈ 0.586)
+- VIFs (modelo completo): OverallQual ≈ 2.58; GrLivArea ≈ 2.54; GarageCars ≈ 1.85; TotalBsmtSF ≈ 1.61; YearBuilt ≈ 2.07; FullBath ≈ 2.12; LotArea ≈ 1.13
+
+# Respostas às perguntas
+
+## 1. Interpretação estatística
+
+### a) Quais variáveis permanecem significativas após a aplicação do Stepwise?
+
+OverallQual, GrLivArea, GarageCars, TotalBsmtSF, YearBuilt e LotArea permanecem no modelo final e apresentam p-valores muito baixos (≈ 0.0). FullBath foi retirada pelo critério AIC.
+
+### b) Qual a função da transformação log(SalePrice) no contexto do modelo?
+
+A transformação log estabiliza variância, reduz assimetria e torna os efeitos interpretáveis aproximadamente como impactos percentuais sobre o preço.
+
+### c) O valor de R² ajustado indica um bom ajuste? Justifique.
+
+O R² ajustado de ~0.817 indica que cerca de 81.7% da variação em log(SalePrice) é explicada pelas variáveis do modelo — considerado um bom ajuste para esse tipo de problema. Porém, um R² elevado não exclui problemas de especificação, vieses ou falta de validade externa.
+
+## 2. Diagnóstico do modelo
+
+### a) Há indícios de multicolinearidade? Quais variáveis estão mais correlacionadas?
+
+Os VIFs estão todos abaixo de 5, logo não há indício de colinearidade problemática. As variáveis com VIFs mais altos são OverallQual e GrLivArea (~2.5), mas ainda em níveis aceitáveis.
+
+### b) Como o VIF auxilia na detecção de colinearidade?
+
+VIF quantifica quanto a variância do estimador de um coeficiente aumenta devido à correlação com as demais variáveis. Valores muito altos (p.ex. >5 ou >10) apontam colinearidade preocupante.
+
+### c) A remoção de variáveis pelo Stepwise foi estatística ou teórica?
+
+Foi estatística: o Stepwise selecionou o conjunto que minimiza o AIC sem utilizar justificativa teórica explícita.
+
+## 3. Avaliação metodológica
+
+### a) O uso do Stepwise é adequado neste contexto? Quais riscos ele traz?
+
+É aceitável para reduzir parcimônia em problemas com muitas variáveis, mas traz riscos: instabilidade do modelo, viés na inferência pós-seleção, possível exclusão de variáveis relevantes por correlação e overfitting se usado sem validação cruzada.
+
+### b) Que pressupostos da regressão devem ser verificados para validar o modelo?
+
+- Linearidade (em log-scale)
+- Independência dos erros
+- Homocedasticidade
+- Normalidade dos resíduos (para inferência)
+- Ausência de multicolinearidade forte
+- Ausência de observações influentes
+
+### c) Sugira duas melhorias possíveis: uma estatística e uma conceitual.
+
+- Estatística: aplicar validação cruzada e/ou usar erros padrão robustos se houver heterocedasticidade; testar transformações ou termos não-lineares (polinômios, interações).
+- Conceitual: incluir variáveis de localização/neighborhood e variável idade da casa (YearSold - YearBuilt) ou efeitos de bairro; priorizar variáveis por teoria e evitar seleção puramente automatizada.
+
+## 4. Reflexão final
+
+O modelo é mais adequado para fins de previsão/estimação (bom R² e variáveis explicativas fortes). Para inferência causal (compreensão de mecanismos) são necessárias abordagens adicionais (controle de viés, desenho causal, variáveis de confusão).
+ 
+### Tabelas completas (saída do script)
+
+Bloco com os resultados completos (copiados de `analysis_output_questao01.txt`):
+
+```
+--- Modelo completo ---
+R2: 0.8180  R2 ajustado: 0.8171
+
+Tabela de coeficientes (modelo completo)
+            Estimate   Std. Error    t value     Pr(>|t|)
+(Intercept)  5.844130e+00 4.043011e-01 14.4548943 2.393534e-44
+OverallQual  1.069983e-01 5.191807e-03 20.6090591 5.495557e-83
+GrLivArea    2.294378e-04 1.355748e-05 16.9233363 8.915921e-59
+GarageCars   8.417781e-02 8.149523e-03 10.3291694 3.491854e-24
+TotalBsmtSF  1.046673e-04 1.294264e-05  8.0870119 1.277624e-15
+YearBuilt    2.483387e-03 2.128304e-04 11.6683853 3.903620e-30
+FullBath    -6.449290e-03 1.182762e-02 -0.5452738 5.856490e-01
+LotArea      3.313059e-06 4.768189e-07  6.9482546 5.566216e-12
+
+VIF (modelo completo)
+OverallQual   GrLivArea  GarageCars TotalBsmtSF   YearBuilt    FullBath 
+  2.577687    2.537592    1.854482    1.611917    2.065929    2.122833 
+   LotArea 
+  1.132476 
+
+--- Modelo selecionado (exhaustive AIC) ---
+Variáveis selecionadas:  OverallQual, GrLivArea, GarageCars, TotalBsmtSF, YearBuilt, LotArea 
+R2: 0.8180  R2 ajustado: 0.8172
+
+Tabela de coeficientes (modelo step)
+           Estimate   Std. Error   t value     Pr(>|t|)
+(Intercept) 5.920945e+00 3.788723e-01 15.627812 5.242950e-51
+OverallQual 1.068513e-01 5.183552e-03 20.613527 5.039509e-83
+GrLivArea   2.256218e-04 1.160879e-05 19.435433 5.632267e-75
+GarageCars  8.401433e-02 8.142037e-03 10.318588 3.864739e-24
+TotalBsmtSF 1.055816e-04 1.283046e-05  8.228985 4.151426e-16
+YearBuilt   2.442325e-03 1.990149e-04 12.272071 5.181898e-33
+LotArea     3.316392e-06 4.766644e-07  6.957498 5.222646e-12
+
+VIF (modelo step)
+OverallQual   GrLivArea  GarageCars TotalBsmtSF   YearBuilt     LotArea 
+  2.570739    1.861434    1.851972    1.584860    1.807298    1.132290 
+
+ANOVA (modelo step vs completo)
+Analysis of Variance Table
+
+Model 1: SalePrice ~ OverallQual + GrLivArea + GarageCars + TotalBsmtSF + 
+   YearBuilt + FullBath + LotArea
+Model 2: SalePrice ~ OverallQual + GrLivArea + GarageCars + TotalBsmtSF + 
+   YearBuilt + LotArea
+  Res.Df    RSS Df  Sum of Sq      F Pr(>F)
+1   1452 42.371                            
+2   1453 42.380 -1 -0.0086763 0.2973 0.5856
+
+```
+---
+
+## QUESTÃO 02
+
+## 1. Interpretação estatística
+
+### a) Variáveis significativas no modelo final:
+
+- `gendermale`: coeficiente ≈ -4.01, p < 0.001 — alunos do sexo masculino apresentam, em média, nota média ~4 pontos menor que o grupo de referência (female).
+- `race.ethnicity` — grupos D e E significantemente melhores (D: +5.75, p < 0.001; E: +7.82, p < 0.001); grupo C tem sinal positivo marginal (p ≈ 0.056).
+- `lunchstandard`: coeficiente ≈ +8.63, p < 0.001 — alunos com almoço padrão (provavelmente indicador de menor necessidade) têm média superior.
+- `test.preparation.coursenone`: coeficiente ≈ -7.73, p < 0.001 — não ter feito curso preparatório está associado a média ~7.7 pontos menor.
+
+### b) Grupos com melhor desempenho médio segundo o modelo:
+
+- Alunos dos grupos étnicos D e E.
+- Alunos com `lunch = standard`.
+- Alunos que fizeram o curso preparatório (referência `completed`), já que `none` tem coeficiente negativo.
+
+### c) R² ajustado:
+
+- Ajustado ≈ 0.1947 — o modelo explica cerca de 19.5% da variância na nota média. Isso é um ajuste fraco a moderado: captura padrões gerais mas deixa grande parte da variação inexplicada.
+
+## 2. Diagnóstico do modelo
+
+### a) Multicolinearidade:
+
+- VIFs (transformados) mostram valores ~1.00–1.02 para os fatores (GVIF^(1/(2*Df)) ≈ 1.00), indicando ausência de multicolinearidade problemática.
+
+### b) Relevância de `test.preparation.course`:
+
+- Sim — `test.preparation.coursenone` é altamente significativo (p < 2e-16) e com efeito grande (≈ -7.7), indicando que o curso preparatório tem impacto substancial e estatisticamente robusto.
+
+### c) Efeito de `race.ethnicity`:
+
+- Sim: alguns níveis (D, E) são estatisticamente significativos (p < 0.001). Portanto há diferenças médias entre grupos étnicos no dataset.
+
+## 3. Avaliação metodológica
+
+### a) O Stepwise removeu variáveis teoricamente importantes?
+
+- O stepAIC não alterou o modelo (modelo stepwise = modelo completo), portanto não removeu variáveis.
+
+### b) Tratamento de `race.ethnicity`:
+
+- É adequado tratá-la como fator nominal quando apenas diferenças médias entre categorias são de interesse. Alternativas: codificação ordinal (se existir ordem), redução dimensional (fatores principais), ou modelagem com efeitos aleatórios (se houver agrupamento hierárquico por escola/região).
+
+## 4. Discussão crítica
+
+### a) Identificação de desigualdades vs diferenças médias:
+
+- O modelo identifica diferenças médias entre grupos (por gênero, etnia, almoço e preparação). Para afirmar desigualdades estruturais seria necessário um desenho causal (controle de confounders, variáveis socioeconômicas adicionais, desenho longitudinal) — aqui temos apenas associações.
+
+### b) Uso para predição:
+
+- O modelo pode ser usado para previsões simples, mas R² ajustado baixo (~0.195) indica que previsões terão erro considerável. Para predição prática, seria necessário incluir mais variáveis explicativas e possivelmente modelos não-lineares.
+
+### c) Melhorias propostas:
+
+- Estatística: incluir interações (p.ex. `test.preparation.course:race.ethnicity`) e variáveis contínuas socioeconômicas, além de validação cruzada para avaliar performance preditiva.
+- Interpretativa: coletar variáveis sobre renda familiar, escolaridade dos pais (já disponível parcialmente), e medidas de recursos escolares para explicar mecanismos causais e reduzir viés.
+
+## Tabelas completas
+
+### Coeficientes (modelo completo)
+
+| Termo | Estimate | Std. Error | t value | Pr(>|t|) |
+|---|---:|---:|---:|---:|
+| (Intercept) | 65.2752 | 1.6169 | 40.370 | < 2e-16 |
+| gendermale | -4.0110 | 0.8136 | -4.930 | 9.64e-07 |
+| race.ethnicitygroup B | 1.4720 | 1.6479 | 0.893 | 0.371942 |
+| race.ethnicitygroup C | 2.9489 | 1.5399 | 1.915 | 0.055780 |
+| race.ethnicitygroup D | 5.7458 | 1.5720 | 3.655 | 0.000271 |
+| race.ethnicitygroup E | 7.8218 | 1.7400 | 4.495 | 7.77e-06 |
+| lunchstandard | 8.6320 | 0.8474 | 10.187 | < 2e-16 |
+| test.preparation.coursenone | -7.7255 | 0.8464 | -9.127 | < 2e-16 |
+
+### VIF (modelo completo)
+
+| Termo | GVIF | Df | GVIF^(1/(2*Df)) |
+|---|---:|---:|---:|
+| gender | 1.009684 | 1 | 1.004830 |
+| race.ethnicity | 1.018381 | 4 | 1.002279 |
+| lunch | 1.004389 | 1 | 1.002192 |
+| test.preparation.course | 1.005995 | 1 | 1.002993 |
+
+### ANOVA (m_full vs m_step)
+
+Analysis of Variance Table
+
+Model 1: avg_score ~ gender + race.ethnicity + lunch + test.preparation.course
+
+Model 2: avg_score ~ gender + race.ethnicity + lunch + test.preparation.course
+
+| Res.Df | RSS |
+|---:|---:|
+| 992 | 162378 |
+
+Observação: ANOVA indica que os modelos são idênticos (diferença zero), ou seja, o stepAIC não alterou o conjunto de variáveis.
+
+---
+
+## Questão 03
+
+### Contexto e Metodologia
+
+Realizei uma análise de sentimento sobre o texto "The Adventures of Tom Sawyer" (Mark Twain). Procedimentos:
+
+- Texto tokenizado em formato tidy (uma palavra por linha) e remoção de stop words.
+- Léxico utilizado: Bing (classifica palavras como "positive" ou "negative").
+- Agrupamento: blocos de 40 linhas (parâmetro `block_size = 40`) para estimar a variação ao longo da narrativa.
+- Saídas geradas: gráfico de variação por bloco, tabela com contagens por bloco e as 20 palavras mais frequentes por polaridade.
+
+Arquivos gerados pelo script:
+
+- `sentiment_variation_bing.png` — gráfico da variação de sentimento por bloco.
+- `sentiment_by_block_bing.csv` — contagem de palavras positivas/negativas por bloco e índice de sentimento líquido.
+- `top_positive_words_bing.csv` — palavras que mais contribuem para sentimento positivo.
+- `top_negative_words_bing.csv` — palavras que mais contribuem para sentimento negativo.
+- `analysis_output_questao03.txt` — resumo textual da análise.
+
+
+```{r fig.cap="Variação de Sentimento ao longo de 'The Adventures of Tom Sawyer' (Bing)", out.width='900px', echo=FALSE}
+knitr::include_graphics("sentiment_variation_bing.png")
+```
+
+---
+
+### 1. Interpretação estatística
+
+a) Comportamento geral do sentimento ao longo do texto
+
+- O padrão geral mostra um predomínio de sentimento negativo ao longo de grande parte da narrativa: muitos blocos têm valores negativos (sentiment_score < 0). Observam-se quedas emocionais muito pronunciadas em alguns trechos (p.ex. blocos com scores -21, -25 e -23 que aparecem nos índices 44, 53 e 69 do arquivo `sentiment_by_block_bing.csv`).
+- Há também trechos positivos notáveis: o bloco 61 apresenta um pico positivo forte (sentiment_score = +14) e há pequenos picos positivos dispersos (ex.: blocos 10, 13, 15, 24, 38, 39, 64–66, 71–72). No gráfico, esses picos contrastam com as longas quedas negativas, sugerindo alternância entre episódios mais sombrios e episódios mais leves/alegres.
+
+b) Predomínio de sentimentos e tom da obra
+
+- O predomínio de palavras negativas é compatível com episódios narrativos mais tensos — mortes, perigos, conflitos — presentes em partes do romance. Porém, o vocabulário positivo (p.ex. "pretty", "glad", "perfectly", "honor") também é comum, refletindo trechos de humor, triunfo ou descrição positiva.
+- Em suma: o índice mostra que a obra alterna trechos sombrios e trechos leves, mas os trechos negativos são mais numerosos e mais intensos em magnitude, o que dá um perfil geral levemente negativo quando agregado por blocos de 40 linhas.
+
+c) Vocabulário que mais contribui
+
+- Palavras que mais contribuem para o negativo (`top_negative_words_bing.csv`): poor, dead, awful, kill, struck, hard, killed, murder, trouble, worried, sick, bad, cold, broke, dark, scared, stranger, tired, break, death, strange, uneasy. Essas palavras evidenciam perigo, doença, morte e dificuldades — coerente com sinais narrativos de conflito/risco.
+- Palavras que mais contribuem para o positivo (`top_positive_words_bing.csv`): pretty, perfectly, glad, honor, quiet, astonished, free, powerful, ready, refund, comfortable, excited, mighty, noble, bright, safe, soft, comfort, excitement, celebrated, etc. Muitas remetem a descrições elogiosas, alívio, segurança ou prazer.
+
+---
+
+### 2. Diagnóstico e metodologia
+
+a) Influência do agrupamento em blocos de 40 linhas
+
+- O tamanho do bloco controla o compromisso entre resolução temporal (granularidade) e sinal estatístico (contagens suficientes por bloco). Com 40 linhas, cada bloco contém mais tokens, reduzindo variabilidade aleatória, mas tornando os picos/quedas mais suaves e deslocando eventos curtos entre blocos.
+- Se usássemos 20 linhas: aumentaríamos a resolução (mais blocos, capaz de capturar eventos curtos), porém com maiores flutuações ruidosas (mais zeros ou contagens pequenas). Se usássemos 80 linhas: reduziríamos ruído e obteríamos uma visão mais agregada, atenuando picos/vales de curta duração e possivelmente escondendo mudanças rápidas na narrativa.
+
+b) Adequação do léxico Bing para textos literários
+
+- Bing é simples e direto (palavra → positivo/negativo). É adequado para um panorama rápido, mas tem limitações: não fornece intensidade (valores) e não captura nuances emocionais além de polaridade.
+- Alternativas:
+  - AFINN: pontua cada palavra com intensidade (bom para medir magnitude), mas também é léxico orientado a linguagem contemporânea.
+  - NRC: associa palavras a várias emoções (alegria, medo, raiva, tristeza, surpresa etc.), permitindo análise mais rica além da polaridade.
+  - Loughran & McDonald: otimizado para textos financeiros (não ideal aqui).
+- Recomendo testar NRC (para perfis emocionais) e AFINN (para intensidade) como complementos.
+
+c) Impacto da exclusão de stop words
+
+- Excluir stop words é padrão para focar no léxico carregado semanticamente (substantivos, adjetivos, verbos) — útil para medir sentimento baseado em palavras de conteúdo.
+- Em literatura, porém, stop words podem ajudar a captar construções ironicamente formuladas (p.ex. negações com "not" antes de adjetivos). Aqui o pipeline removeu palavras funcionais como "not"? (dependendo do dicionário de stop words usado). Se "not" for removido, frases como "not good" podem ser interpretadas incorretamente. Portanto, ao trabalhar com sentimento literário, recomendo manter explicitamente algumas palavras funcionais relevantes (negações) ou tratar negações separadamente.
+
+---
+
+### 3. Avaliação crítica
+
+a) O sentimento calculado representa o estilo de Mark Twain?
+
+- Parcialmente. O método captura padrões léxicos de positivo/negativo rápidos e identifica trechos com palavras de alto peso polar. Contudo, o estilo de Twain (ironia, humor, ambiguidade) nem sempre é refletido por léxicos de polaridade.
+
+b) Limitações semânticas: ironia, humor, sarcasmo
+
+- Métodos baseados apenas em léxicos falham em detectar ironia, sarcasmo, alusões, sentido contextual (p.ex. quando uma palavra positiva é usada sarcasticamente). Eles também não lidam bem com personagens falando de forma irônica ou com polifonia narrativa.
+- Estratégias para mitigar: (i) modelos baseados em contexto (BERT fine-tuned para sentimento literário), (ii) análise de coocorrência e padrões de discurso (p.ex. estruturas narrativas que sinalizam ironia), (iii) anotação manual de um pequeno conjunto para treinar modelos supervisionados.
+
+c) Proposta de extensão — comparar Mark Twain com Jane Austen
+
+- Normalizar por tamanho (freq. por 1000 tokens) e alinhar por unidades narrativas (capítulos ou blocos equivalentes).
+- Aplicar múltiplos léxicos (Bing, NRC, AFINN) e modelos baseados em embedding/contexto para captar diferenças estilísticas e uso de ironia.
+- Medir: distribuição de emoções (NRC), intensidade média (AFINN), variação temporal (rolling average), e distância semântica entre distribuições de sentimento (p.ex. KL-divergence).
+- Usar análise de tópicos e extracción de collocations para ver quais temas emocionais predominam em cada autor.
+
+---
+
+### 4. Discussão aplicada
+
+a) Uso em IA narrativa e análise literária automatizada
+
+- Variações emocionais por bloco podem alimentar sistemas de IA narrativa para controlar ritmo emocional (por exemplo: gerar continuidade emocional, ajustar tensão dramática), detectar arcos emocionais e sugerir pontos de virada.
+- Em análise literária, esses perfis quantitativos complementam leitura close-reading, indicando onde focar análise qualitativa.
+
+b) Visualizações alternativas recomendadas
+
+- Rolling mean/curva suavizada do `sentiment_score` para evidenciar arcos de longo prazo.
+- Heatmap (blocos × emoções) se usar NRC (para ver onde predomina medo, alegria, tristeza, etc.).
+- Word clouds por bloco (positivo vs negativo) para identificar termos dominantes em trechos específicos.
+- Diagrama de arco narrativo (cumulative sentiment) para ressaltar o fluxo emocional acumulado.
+
+c) Como text mining reinterpreta obras clássicas
+
+- Permite quantificar padrões antes só perceptíveis qualitativamente (ritmo, repetição de temas, polarização emocional). Oferece hipóteses testáveis (e.g., capítulos mais sombrios coincidem com eventos X) e ajuda a comparar estilos entre autores de forma replicável.
+
+---
+
+### Observações finais e limitações práticas
+
+- Esta análise depende do léxico e do pré-processamento (remoção de stop words, lematização/normalização). Resultados devem ser interpretados como indicativos, não definitivos.
+- Recomenda-se complementar com análise qualitativa (leitura dos trechos com picos/vales) e testar léxicos e modelos contextuais.
+
+---
+
+(Os resultados brutos e gráficos associados estão em `sentiment_by_block_bing.csv`, `top_positive_words_bing.csv`, `top_negative_words_bing.csv` e `sentiment_variation_bing.png`. Um resumo foi gravado em `analysis_output_questao03.txt`.)
+
