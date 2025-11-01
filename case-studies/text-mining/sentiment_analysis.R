@@ -5,16 +5,16 @@ library(dplyr)
 library(ggplot2)
 
 # --- Detectar arquivo do texto ---
-possible_files <- c("tom_sawyer.txt", "tom-sawyer.txt", "tom_sawyer_1.txt", "tom sawyer.txt") # nolint
+possible_files <- c("tom_sawyer.txt", "tom-sawyer.txt", "tom_sawyer_1.txt", "tom sawyer.txt")  
 text_path <- NULL
 for (f in possible_files) {
-	if (file.exists(f)) { # nolint
-		text_path <- f # nolint
-		break # nolint
-	} # nolint
+	if (file.exists(f)) {  
+		text_path <- f  
+		break  
+	}  
 }
 if (is.null(text_path)) {
-	stop(paste0("Arquivo do texto não encontrado. Copie o arquivo 'tom_sawyer.txt' para o diretório: ", getwd())) # nolint
+	stop(paste0("Arquivo do texto não encontrado. Copie o arquivo 'tom_sawyer.txt' para o diretório: ", getwd()))  
 }
 
 # --- Carregar o texto ---
@@ -24,42 +24,42 @@ df <- tibble(line = 1:length(texto), text = texto)
 # --- Tokenização (palavra por linha) ---
 data("stop_words")
 tokens <- df %>% 
-	unnest_tokens(word, text) %>% # nolint 
-	mutate(word = str_to_lower(word)) %>% # nolint
-	mutate(word = str_extract(word, "[a-z']+")) %>% # nolint
-	filter(!is.na(word)) %>% # nolint
-	anti_join(stop_words, by = "word") # nolint
+	unnest_tokens(word, text) %>%   
+	mutate(word = str_to_lower(word)) %>%  
+	mutate(word = str_extract(word, "[a-z']+")) %>%  
+	filter(!is.na(word)) %>%  
+	anti_join(stop_words, by = "word")  
 
 # --- Associação de sentimentos (léxico Bing) ---
 # Agrupamos o texto em blocos para observar variação ao longo da narrativa.
 block_size <- 40 # linhas por bloco (pode ajustar para 20 ou 80)
 sent_join <- tokens %>%
-	inner_join(get_sentiments("bing"), by = "word") %>% # nolint
-	mutate(index = (line - 1) %/% block_size + 1) %>% # nolint
-	count(index, sentiment) %>% # nolint
-	pivot_wider(names_from = sentiment, values_from = n, values_fill = 0) %>% # nolint
-	mutate(sentiment_score = positive - negative) # nolint
+	inner_join(get_sentiments("bing"), by = "word") %>%  
+	mutate(index = (line - 1) %/% block_size + 1) %>%  
+	count(index, sentiment) %>%  
+	pivot_wider(names_from = sentiment, values_from = n, values_fill = 0) %>%  
+	mutate(sentiment_score = positive - negative)  
 
 # --- Palavras que mais contribuem ---
 top_pos <- tokens %>%
-	inner_join(get_sentiments("bing") %>% filter(sentiment == "positive"), by = "word") %>%  # nolint
-	count(word, sort = TRUE) %>% # nolint
-	slice_max(n, n = 20) # nolint 
+	inner_join(get_sentiments("bing") %>% filter(sentiment == "positive"), by = "word") %>%   
+	count(word, sort = TRUE) %>%  
+	slice_max(n, n = 20)   
 
 top_neg <- tokens %>%
-	inner_join(get_sentiments("bing") %>% filter(sentiment == "negative"), by = "word") %>% # nolint
-	count(word, sort = TRUE) %>% # nolint
-	slice_max(n, n = 20) # nolint
+	inner_join(get_sentiments("bing") %>% filter(sentiment == "negative"), by = "word") %>%  
+	count(word, sort = TRUE) %>%  
+	slice_max(n, n = 20)  
 
 # --- Gráfico de variação de sentimento ---
 plot_file <- "sentiment_variation_bing.png"
 png(plot_file, width = 1200, height = 600)
 ggplot(sent_join, aes(x = index, y = sentiment_score)) +
-	geom_col(fill = "steelblue", show.legend = FALSE) + # nolint
-	labs(title = "Variação de Sentimento ao longo de 'The Adventures of Tom Sawyer' (Bing)", # nolint
-			 x = paste0("Trecho (agrupamento de ", block_size, " linhas)"), # nolint
-			 y = "Índice de sentimento líquido (Positivo - Negativo)") + # nolint
-	theme_minimal() # nolint
+	geom_col(fill = "steelblue", show.legend = FALSE) +  
+	labs(title = "Variação de Sentimento ao longo de 'The Adventures of Tom Sawyer' (Bing)",  
+			 x = paste0("Trecho (agrupamento de ", block_size, " linhas)"),  
+			 y = "Índice de sentimento líquido (Positivo - Negativo)") +  
+	theme_minimal()  
 dev.off()
 
 # --- Salvar tabelas de palavras ---
@@ -92,4 +92,4 @@ cat(" - sentiment_by_block_bing.csv\n")
 cat(" -", out_file, "(resumo)\n")
 
 # Fim do script
-# nolint
+ 

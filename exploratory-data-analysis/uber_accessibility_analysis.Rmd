@@ -20,8 +20,11 @@ Carregamos os pacotes necessários e a base de dados. O arquivo contém variáve
 library(stats)
 library(car)
 
-dados <- read.csv2("C:/Users/gustavo.telles/Desktop/Predictive-Analysis/csv/uber_analise_20181003.csv") # nolint
 # Ajuste o caminho conforme o local de execução
+
+setwd("C:/Users/ediad/OneDrive/Área de Trabalho/Predictive-Analysis/data-exploration")
+
+dados <- read.csv2("uber_analise_20181003.csv")
 ```
 
 2. Exploração Inicial dos Dados
@@ -79,7 +82,7 @@ Como abordagem secundária, modelamos o desvio padrão do tempo de espera (desvp
 
 ```{r}
 modelo_desvpad <- lm(
-  desvpad_amostral ~ QTLINBUS2018 + KMLINBUS2018 + QTPONTBUS2018 + QTESTMETRO2018 + # nolint
+  desvpad_amostral ~ QTLINBUS2018 + KMLINBUS2018 + QTPONTBUS2018 + QTESTMETRO2018 +
     RENDP2010 + ARE1 + POP2018 + DENPOP2018 + DOMP2018 + ESTAB2016 +
     EMP2016 + PNBRAN2010 + TEMP2010_5MIN + TEMP2010_30MIN + TEMP2010_60MIN +
     TEMP2010_120MIN + TEMP2010_121MIN + TEMP2010_0MIN + PDOMC2010 + PDOMM2010,
@@ -95,7 +98,7 @@ vif(modelo_desvpad)
 Selecionamos variáveis para o modelo alternativo usando stepwise e repetimos o diagnóstico.
 
 ```{r}
-modelo_stepwise_desvpad <- step(modelo_desvpad, direction = "both", trace = FALSE) # nolint
+modelo_stepwise_desvpad <- step(modelo_desvpad, direction = "both", trace = FALSE)
 summary(modelo_stepwise_desvpad)
 vif(modelo_stepwise_desvpad)
 ```
@@ -109,22 +112,22 @@ Nesta seção, comparamos os resultados dos modelos completo e stepwise para a v
 
 ## Tabela de Coeficientes do Modelo Completo
 ```{r}
-knitr::kable(summary(modelo_completo)$coefficients, caption = "Coeficientes do Modelo Completo") # nolint
+knitr::kable(summary(modelo_completo)$coefficients, caption = "Coeficientes do Modelo Completo") 
 ```
 
 ## Tabela de VIF do Modelo Completo
 ```{r}
-knitr::kable(as.data.frame(vif(modelo_completo)), caption = "VIF do Modelo Completo") # nolint
+knitr::kable(as.data.frame(vif(modelo_completo)), caption = "VIF do Modelo Completo") 
 ```
 
 ## Tabela de Coeficientes do Modelo Stepwise
 ```{r}
-knitr::kable(summary(modelo_stepwise)$coefficients, caption = "Coeficientes do Modelo Stepwise") # nolint
+knitr::kable(summary(modelo_stepwise)$coefficients, caption = "Coeficientes do Modelo Stepwise") 
 ```
 
 ## Tabela de VIF do Modelo Stepwise
 ```{r}
-knitr::kable(as.data.frame(vif(modelo_stepwise)), caption = "VIF do Modelo Stepwise") # nolint
+knitr::kable(as.data.frame(vif(modelo_stepwise)), caption = "VIF do Modelo Stepwise") 
 ```
 
 ## Gráfico de Resíduos do Modelo Stepwise

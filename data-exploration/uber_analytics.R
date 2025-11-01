@@ -1,24 +1,26 @@
 library(stats)
 library(car)
 
-dados <- read.csv2("C:/Users/gustavo.telles/Desktop/Predictive-Analysis/csv/uber_analise_20181003.csv") # nolint
+setwd("C:/Users/ediad/OneDrive/Área de Trabalho/Predictive-Analysis/data-exploration")
+
+dados <- read.csv2("uber_analise_20181003.csv")
 
 summary(dados)
 
-modelo_media_RENDP2010 <- lm(data = dados, # nolint
-                            formula = dados$media ~ dados$RENDP2010) # nolint
+modelo_media_RENDP2010 <- lm(data = dados, 
+                            formula = dados$media ~ dados$RENDP2010) 
 
 summary(modelo_media_RENDP2010)
 
-modelo_media_ESTAB2016 <- lm(data = dados, # nolint
-                            formula = dados$media ~ dados$ESTAB2016) # nolint
+modelo_media_ESTAB2016 <- lm(data = dados, 
+                            formula = dados$media ~ dados$ESTAB2016)
 
 summary(modelo_media_ESTAB2016)
 
 modelo_media <- lm(data = dados,
                    formula = dados$media ~
                      dados$QTLINBUS2018 +
-                     dados$KMLINBUS2018 +  # nolint
+                     dados$KMLINBUS2018 + 
                      dados$QTPONTBUS2018 +
                      dados$QTESTMETRO2018 +
                      dados$RENDP2010 +
@@ -41,7 +43,7 @@ modelo_media <- lm(data = dados,
 summary(modelo_media)
 vif(modelo_media)
 
-#stepwise m?dia
+#stepwise media
 modelo_media_stepwise <- step(object = modelo_media)
 summary(modelo_media_stepwise)
 vif(modelo_media_stepwise)

@@ -22,15 +22,15 @@ library(ggplot2)
 library(textdata)
 
 # Carregar o texto
-setwd("C:/Users/gustavo.telles/Documents/GitHub/Predictive-Analysis/tom-sentiment-lab") # nolint
-tom_raw <- readLines("C:/Users/gustavo.telles/Documents/GitHub/Predictive-Analysis/tom-sentiment-lab/tom_sawyer.txt", encoding = "UTF-8") # nolint
+setwd("C:/Users/gustavo.telles/Documents/GitHub/Predictive-Analysis/tom-sentiment-lab")  
+tom_raw <- readLines("C:/Users/gustavo.telles/Documents/GitHub/Predictive-Analysis/tom-sentiment-lab/tom_sawyer.txt", encoding = "UTF-8")  
 tom_tbl <- tibble(
-  text = tom_raw, # nolint
+  text = tom_raw,  
   linenumber = seq_along(tom_raw)
 )
 # Detectar capítulos por regex
 tom_tbl <- tom_tbl %>%
-  mutate(chapter = cumsum(str_detect(text, regex("CHAPTER\\s+[IVXLCDM0-9]+", ignore_case = TRUE)))) # nolint
+  mutate(chapter = cumsum(str_detect(text, regex("CHAPTER\\s+[IVXLCDM0-9]+", ignore_case = TRUE))))  
 ```
 
 # 2. Tokenização e Limpeza
@@ -144,7 +144,7 @@ joy_words %>% ggplot(aes(reorder(word, n), n)) +
 
 ```{r comparacao}
 # Tabela resumo: saldo de sentimento por capítulo para cada léxico
-sent_bing_chapter_resumo <- sent_bing_chapter %>% select(chapter, saldo) %>% rename(saldo_bing = saldo) # nolint
+sent_bing_chapter_resumo <- sent_bing_chapter %>% select(chapter, saldo) %>% rename(saldo_bing = saldo)  
 
 sent_nrc_chapter <- tom_sent_nrc %>%
   filter(sentiment %in% c("positive", "negative")) %>%
@@ -158,7 +158,7 @@ sent_afinn_chapter <- tom_sent_afinn %>%
 
 # Juntar tudo em uma tabela comparativa
 comparativo_chapter <- sent_bing_chapter_resumo %>%
-  left_join(sent_nrc_chapter %>% select(chapter, saldo_nrc), by = "chapter") %>% # nolint
+  left_join(sent_nrc_chapter %>% select(chapter, saldo_nrc), by = "chapter") %>%  
   left_join(sent_afinn_chapter, by = "chapter")
 
 # Visualização comparativa dos saldos por capítulo
@@ -174,7 +174,7 @@ comparativo_chapter_long %>%
        x = "Capítulo", y = "Saldo de Sentimento", color = "Léxico")
 
 # Tabela comparativa dos saldos por capítulo
-comparativo_chapter %>% head(10) %>% knitr::kable(caption = "Exemplo de tabela comparativa dos 10 primeiros capítulos") # nolint
+comparativo_chapter %>% head(10) %>% knitr::kable(caption = "Exemplo de tabela comparativa dos 10 primeiros capítulos")  
 ```
 
 # Discussão Crítica
