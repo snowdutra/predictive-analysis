@@ -1,0 +1,17 @@
+,0
+Contract_One year,5.0
+InternetService_Fiber optic,5.0
+tenure,5.0
+PaperlessBilling_Yes,5.0
+TotalCharges,5.0
+TechSupport_Yes,4.0
+Contract_Two year,4.0
+MonthlyCharges,3.0
+PaymentMethod_Electronic check,3.0
+MultipleLines_Yes,3.0
+StreamingMovies_Yes,2.0
+SeniorCitizen,2.0
+OnlineSecurity_Yes,1.0
+MultipleLines_No phone service,1.0
+DeviceProtection_No internet service,1.0
+Partner_Yes,1.0
